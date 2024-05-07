@@ -128,6 +128,41 @@ router.delete("/:id", async (request, response) => {
   }
 });
 
+// Route to add a test record
+router.post("/:id/addTest", async (request, response) => {
+  try {
+    const { id } = request.params;
+    const { subject, obtainMarks, totalMarks } = request.body;
+
+    if (!subject || !obtainMarks || !totalMarks) {
+      return response.status(400).send({
+        message: `Send all required fields: Subject, Total Marks, and Obtain Marks`,
+      });
+    }
+
+    const student = await Student.findById(id);
+
+    if (!student) {
+      return response.status(404).json({ message: "Student not found" });
+    }
+
+    // Initialize testRecords array if it does not exist
+    if (!student.testRecords) {
+      student.testRecords = [];
+    }
+
+    student.testRecords.push({ subject, obtainMarks, totalMarks });
+    await student.save();
+
+    return response
+      .status(201)
+      .json({ message: "Test record added successfully" });
+  } catch (error) {
+    console.error(error.message);
+    return response.status(500).json({ message: "Server error" });
+  }
+});
+
 // Route to add a fee record
 router.post("/:id/fee", async (request, response) => {
   try {

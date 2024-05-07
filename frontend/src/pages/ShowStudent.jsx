@@ -77,6 +77,8 @@ const ShowStudent = () => {
           }}
         >
           <Link to={`/student/addFeeRecord/${student._id}`}>Add Fee</Link>
+          <br />
+          <Link to={`/student/addTest/${student._id}`}>Add Test Record</Link>
 
           <div style={{ marginBottom: "10px", textAlign: "left" }}>
             <span>ID: </span>

@@ -27,6 +27,13 @@ const studentSchema = mongoose.Schema(
         amount: { type: Number, required: true },
       },
     ],
+    testRecords: [
+      {
+        subject: { type: String, required: true },
+        obtainMarks: { type: Number, required: true },
+        totalMarks: { type: Number, required: true },
+      },
+    ],
     attendance: [
       {
         date: { type: Date, required: true },
