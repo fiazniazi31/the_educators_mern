@@ -1,0 +1,171 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import BackButton from "../../components/BackButton";
+import Spinner from "../../components/Spinner";
+
+const ShowStudentTestRecords = () => {
+  const { id } = useParams(); // Get the student ID from URL params
+  const [testRecords, setTestRecords] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`http://localhost:5555/student/${id}`)
+      .then((response) => {
+        if (response.data && response.data.testRecords) {
+          setTestRecords(response.data.testRecords);
+        } else {
+          console.log("Invalid response format:", response.data);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }, [id]);
+
+  const groupTestRecordsBySubject = (testRecords) => {
+    const groupedRecords = {};
+
+    testRecords.forEach((record) => {
+      if (!groupedRecords[record.subject]) {
+        groupedRecords[record.subject] = [];
+      }
+      groupedRecords[record.subject].push(record);
+    });
+
+    return groupedRecords;
+  };
+
+  const calculatePercentage = (obtainMarks, totalMarks) => {
+    return (obtainMarks / totalMarks) * 100;
+  };
+
+  return (
+    <div style={{ padding: "4px" }}>
+      <BackButton />
+      <h1>Student Test Records</h1>
+      {loading ? (
+        <Spinner />
+      ) : testRecords && testRecords.length > 0 ? (
+        <div>
+          {Object.entries(groupTestRecordsBySubject(testRecords)).map(
+            ([subject, records]) => (
+              <div key={subject} style={{ display: "flex" }}>
+                <div style={{ flex: 1 }}>
+                  <h3>{subject}</h3>
+                  {records.map((record, index) => (
+                    <div key={index}>
+                      <div>
+                        <span>Test {index + 1}</span>
+                      </div>
+                      <div>
+                        <span>Obtained Marks: </span>
+                        <span>{record.obtainMarks}</span>
+                      </div>
+                      <div>
+                        <span>Total Marks: </span>
+                        <span>{record.totalMarks}</span>
+                      </div>
+                      <div>
+                        <span>Percentage: </span>
+                        <span>
+                          {calculatePercentage(
+                            record.obtainMarks,
+                            record.totalMarks
+                          ).toFixed(2)}
+                          %
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h4>{subject} Subject Summary</h4>
+                  <div>
+                    <span>Total Obtained Marks: </span>
+                    <span>
+                      {records.reduce(
+                        (total, record) => total + record.obtainMarks,
+                        0
+                      )}
+                    </span>
+                  </div>
+                  <div>
+                    <span>Total Marks: </span>
+                    <span>
+                      {records.reduce(
+                        (total, record) => total + record.totalMarks,
+                        0
+                      )}
+                    </span>
+                  </div>
+                  <div>
+                    <span>Percentage: </span>
+                    <span>
+                      {calculatePercentage(
+                        records.reduce(
+                          (total, record) => total + record.obtainMarks,
+                          0
+                        ),
+                        records.reduce(
+                          (total, record) => total + record.totalMarks,
+                          0
+                        )
+                      ).toFixed(2)}
+                      %
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
+          <div>
+            <h3>All Subject Summary</h3>
+            <div>
+              <span>Total Obtained Marks: </span>
+              <span>
+                {testRecords.reduce(
+                  (total, record) => total + record.obtainMarks,
+                  0
+                )}
+              </span>
+            </div>
+            <div>
+              <span>Total Marks: </span>
+              <span>
+                {testRecords.reduce(
+                  (total, record) => total + record.totalMarks,
+                  0
+                )}
+              </span>
+            </div>
+            <div>
+              <span>Percentage: </span>
+              <span>
+                {calculatePercentage(
+                  testRecords.reduce(
+                    (total, record) => total + record.obtainMarks,
+                    0
+                  ),
+                  testRecords.reduce(
+                    (total, record) => total + record.totalMarks,
+                    0
+                  )
+                ).toFixed(2)}
+                %
+              </span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div>No test records found</div>
+      )}
+    </div>
+  );
+};
+
+export default ShowStudentTestRecords;

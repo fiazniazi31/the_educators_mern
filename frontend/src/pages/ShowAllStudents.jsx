@@ -107,8 +107,8 @@ const ShowAllStudents = () => {
               <th scope="col">Name</th>
               <th scope="col">Father Name</th>
               <th scope="col">Class</th>
-              <th scope="col">Subjects</th>
-              <th scope="col">Attendance</th>
+              <th scope="col">Previous Attendance</th>
+              <th scope="col">Mark Attendance</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -119,21 +119,43 @@ const ShowAllStudents = () => {
                 <td>{student.name}</td>
                 <td>{student.fatherName}</td>
                 <td>{student.class}</td>
-                <td>{student.subjects.join(", ")}</td>
                 <td>
-                  <button
-                    onClick={() => handleAttendance(student._id, true)}
-                    className="btn btn-success btn-sm"
-                  >
-                    Present
-                  </button>
-                  <button
-                    onClick={() => handleAttendance(student._id, false)}
-                    className="btn btn-danger btn-sm"
-                  >
-                    Absent
-                  </button>
+                  {student.attendance && student.attendance.length > 0 ? (
+                    student.attendance.some(
+                      (record) =>
+                        new Date(record.date).toDateString() ===
+                          new Date(
+                            new Date().setDate(new Date().getDate() - 1)
+                          ).toDateString() && record.present
+                    ) ? (
+                      <span style={{ color: "green" }}>Present</span>
+                    ) : (
+                      <span style={{ color: "red" }}>Absent</span>
+                    )
+                  ) : (
+                    "No attendance records"
+                  )}
                 </td>
+
+                <td>
+                  <span style={{ marginRight: "5px" }}>
+                    <button
+                      onClick={() => handleAttendance(student._id, true)}
+                      className="btn btn-success btn-sm"
+                    >
+                      Present
+                    </button>
+                  </span>
+                  <span>
+                    <button
+                      onClick={() => handleAttendance(student._id, false)}
+                      className="btn btn-danger btn-sm"
+                    >
+                      Absent
+                    </button>
+                  </span>
+                </td>
+
                 <td>
                   <Link to={`/student/details/${student._id}`}>
                     <BsInfoCircle />

@@ -47,56 +47,62 @@ const AddStudentTest = () => {
       <BackButton />
       <h1>Add Student Test</h1>
       <div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
-          <label htmlFor="subject" className="form-label">
-            Subject
-          </label>
-          <select
-            className="form-select"
-            id="subject"
-            value={selectedSubject}
-            onChange={(e) => setSelectedSubject(e.target.value)}
-          >
-            {subjects.map((subject) => (
-              <option key={subject} value={subject}>
-                {subject}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
-          <label htmlFor="obtainMarks" className="form-label">
-            Obtain Marks
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="obtainMarks"
-            value={obtainMarks}
-            onChange={(e) => setObtainMarks(e.target.value)}
-          />
-        </div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
-          <label htmlFor="totalMarks" className="form-label">
-            Total Marks
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="totalMarks"
-            value={totalMarks}
-            onChange={(e) => setTotalMarks(e.target.value)}
-          />
-        </div>
-        <div className="d-grid gap-2 col-6 mx-auto">
-          <button
-            className="btn btn-primary"
-            type="button"
-            onClick={handelSaveStudent}
-          >
-            Save
-          </button>
-        </div>
+        {subjects.length > 0 ? ( // Add this check to ensure subjects array is not empty
+          <div>
+            <div className="mb-3" style={{ textAlign: "left" }}>
+              <label htmlFor="subject" className="form-label">
+                Subject
+              </label>
+              <select
+                className="form-select"
+                id="subject"
+                value={selectedSubject}
+                onChange={(e) => setSelectedSubject(e.target.value)}
+              >
+                {subjects.map((subject) => (
+                  <option key={subject} value={subject}>
+                    {subject}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3" style={{ textAlign: "left" }}>
+              <label htmlFor="obtainMarks" className="form-label">
+                Obtain Marks
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="obtainMarks"
+                value={obtainMarks}
+                onChange={(e) => setObtainMarks(e.target.value)}
+              />
+            </div>
+            <div className="mb-3" style={{ textAlign: "left" }}>
+              <label htmlFor="totalMarks" className="form-label">
+                Total Marks
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="totalMarks"
+                value={totalMarks}
+                onChange={(e) => setTotalMarks(e.target.value)}
+              />
+            </div>
+            <div className="d-grid gap-2 col-6 mx-auto">
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={handelSaveStudent}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div>No subjects found for this student</div>
+        )}
       </div>
     </div>
   );

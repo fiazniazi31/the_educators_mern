@@ -5,6 +5,7 @@ import BackButton from "../components/BackButton";
 import Spinner from "../components/Spinner";
 import { Link } from "react-router-dom";
 import { MdOutlineDelete } from "react-icons/md";
+import ShowStudentTests from "./student/ShowStudentTests ";
 
 const ShowStudent = () => {
   const [student, setStudent] = useState({});
@@ -44,128 +45,177 @@ const ShowStudent = () => {
       const month = date.toLocaleString("default", { month: "long" });
       const day = date.getDate();
 
-      if (!attendanceByMonth[month]) {
-        attendanceByMonth[month] = {};
-      }
+      // Get the current month and year
+      const currentDate = new Date();
+      const currentMonth = currentDate.toLocaleString("default", {
+        month: "long",
+      });
+      const currentYear = currentDate.getFullYear();
 
-      if (!attendanceByMonth[month][day]) {
-        attendanceByMonth[month][day] = [];
-      }
+      if (month === currentMonth && date.getFullYear() === currentYear) {
+        if (!attendanceByMonth[month]) {
+          attendanceByMonth[month] = {};
+        }
 
-      attendanceByMonth[month][day].push(record);
+        if (!attendanceByMonth[month][day]) {
+          attendanceByMonth[month][day] = [];
+        }
+
+        attendanceByMonth[month][day].push(record);
+      }
     });
 
     return attendanceByMonth;
   };
+  // const groupAttendanceByMonth = (attendance) => {
+  //   const attendanceByMonth = {};
+
+  //   attendance.forEach((record) => {
+  //     // Convert record.date to a Date object
+  //     const date = new Date(record.date);
+
+  //     if (!(date instanceof Date) || isNaN(date)) {
+  //       console.error("Invalid date format:", record.date);
+  //       return;
+  //     }
+
+  //     const month = date.toLocaleString("default", { month: "long" });
+  //     const day = date.getDate();
+
+  //     if (!attendanceByMonth[month]) {
+  //       attendanceByMonth[month] = {};
+  //     }
+
+  //     if (!attendanceByMonth[month][day]) {
+  //       attendanceByMonth[month][day] = [];
+  //     }
+
+  //     attendanceByMonth[month][day].push(record);
+  //   });
+
+  //   return attendanceByMonth;
+  // };
 
   const totalPaidFee = student.feeRecords
     ? student.feeRecords.reduce((total, record) => total + record.amount, 0)
     : 0;
 
   return (
-    <div style={{ padding: "4px" }}>
+    <>
       <BackButton />
       <h1>Show Student</h1>
-      {loading ? (
-        <Spinner />
-      ) : student ? (
-        <div
-          style={{
-            border: "1px solid #ccc",
-            padding: "10px",
-            borderRadius: "5px",
-          }}
-        >
-          <Link to={`/student/addFeeRecord/${student._id}`}>Add Fee</Link>
-          <br />
-          <Link to={`/student/addTest/${student._id}`}>Add Test Record</Link>
-
-          <div style={{ marginBottom: "10px", textAlign: "left" }}>
-            <span>ID: </span>
-            <span>{student._id}</span>
-          </div>
-          <div style={{ marginBottom: "10px", textAlign: "left" }}>
-            <span>Name: </span>
-            <span>{student.name}</span>
-          </div>
-          <div style={{ marginBottom: "10px", textAlign: "left" }}>
-            <span>Father Name: </span>
-            <span>{student.fatherName}</span>
-          </div>
-          <div style={{ marginBottom: "10px", textAlign: "left" }}>
-            <span>Subjects: </span>
-            <span>
-              {student.subjects && student.subjects.length > 0
-                ? student.subjects.join(", ")
-                : "No subjects"}
-            </span>
-          </div>
-          <div style={{ marginBottom: "10px", textAlign: "left" }}>
-            <span>Class: </span>
-            <span>{student.class}</span>
-          </div>
-          <div style={{ marginBottom: "10px", textAlign: "left" }}>
-            <span>Paid Fee Records:</span>
-            {student.feeRecords && student.feeRecords.length > 0 ? (
-              <table style={{ width: "100%", marginTop: "5px" }}>
-                <thead>
-                  <tr>
-                    <th>Amount</th>
-                    <th>Month</th>
-                    <th>Year</th>
-                    <th>Delete</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {student.feeRecords.map((record, index) => (
-                    <tr key={index}>
-                      <td>{record.amount}</td>
-                      <td>{record.month}</td>
-                      <td>{record.year}</td>
-                      <td>
-                        <button
-                          onClick={() => {
-                            axios
-                              .delete(
-                                `http://localhost:5555/student/${student._id}/fee/${record._id}`
-                              )
-                              .then((response) => {
-                                console.log(response.data);
-                                // Refresh the student data after deletion
+      <Link to={`/student/addFeeRecord/${student._id}`}>Add Fee</Link>
+      <br />
+      <Link to={`/student/addTest/${student._id}`}>Add Test Record</Link>
+      <div
+        style={{
+          padding: "4px",
+          display: "flex",
+          gap: "20px",
+          marginTop: "30px",
+        }}
+      >
+        <div style={{ flex: "1" }}>
+          {loading ? (
+            <Spinner />
+          ) : student ? (
+            <div>
+              <div style={{ marginBottom: "10px", textAlign: "left" }}>
+                <span>ID: </span>
+                <span>{student._id}</span>
+              </div>
+              <div style={{ marginBottom: "10px", textAlign: "left" }}>
+                <span>Name: </span>
+                <span>{student.name}</span>
+              </div>
+              <div style={{ marginBottom: "10px", textAlign: "left" }}>
+                <span>Father Name: </span>
+                <span>{student.fatherName}</span>
+              </div>
+              <div style={{ marginBottom: "10px", textAlign: "left" }}>
+                <span>Subjects: </span>
+                <span>
+                  {student.subjects && student.subjects.length > 0
+                    ? student.subjects.join(", ")
+                    : "No subjects"}
+                </span>
+              </div>
+              <div style={{ marginBottom: "10px", textAlign: "left" }}>
+                <span>Class: </span>
+                <span>{student.class}</span>
+              </div>
+              <div style={{ marginBottom: "10px", textAlign: "left" }}>
+                <span>Paid Fee Records:</span>
+                {student.feeRecords && student.feeRecords.length > 0 ? (
+                  <table style={{ width: "100%", marginTop: "5px" }}>
+                    <thead>
+                      <tr>
+                        <th>Amount</th>
+                        <th>Month</th>
+                        <th>Year</th>
+                        <th>Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {student.feeRecords.map((record, index) => (
+                        <tr key={index}>
+                          <td>{record.amount}</td>
+                          <td>{record.month}</td>
+                          <td>{record.year}</td>
+                          <td>
+                            <button
+                              onClick={() => {
                                 axios
-                                  .get(
-                                    `http://localhost:5555/student/${student._id}`
+                                  .delete(
+                                    `http://localhost:5555/student/${student._id}/fee/${record._id}`
                                   )
                                   .then((response) => {
-                                    setStudent(response.data);
+                                    console.log(response.data);
+                                    // Refresh the student data after deletion
+                                    axios
+                                      .get(
+                                        `http://localhost:5555/student/${student._id}`
+                                      )
+                                      .then((response) => {
+                                        setStudent(response.data);
+                                      })
+                                      .catch((error) => {
+                                        console.log(error);
+                                      });
                                   })
                                   .catch((error) => {
                                     console.log(error);
                                   });
-                              })
-                              .catch((error) => {
-                                console.log(error);
-                              });
-                          }}
-                          className="btn btn-outline-danger"
-                        >
-                          <MdOutlineDelete />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              "No fee records"
-            )}
-          </div>
+                              }}
+                              className="btn btn-outline-danger"
+                            >
+                              <MdOutlineDelete />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  "No fee records"
+                )}
+              </div>
 
-          <div style={{ marginBottom: "10px", textAlign: "left" }}>
-            <span>Total Paid Fee: </span>
-            <span>{totalPaidFee}</span>
-          </div>
-
+              <div style={{ marginBottom: "10px", textAlign: "left" }}>
+                <span>Total Paid Fee: </span>
+                <span>{totalPaidFee}</span>
+              </div>
+              <div>
+                <Link to={`/student/testRecords/${student._id}`}>
+                  View Test Records
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div>No student found</div>
+          )}
+        </div>
+        <div style={{ flex: "1" }}>
           <div style={{ marginBottom: "10px", textAlign: "left" }}>
             <span>Attendance Records:</span>
             {student.attendance && student.attendance.length > 0 ? (
@@ -186,7 +236,15 @@ const ShowStudent = () => {
                             ([day, records]) => (
                               <tr key={day}>
                                 <td>Date:{day}</td>
-                                <td>
+                                <td
+                                  style={{
+                                    backgroundColor: records.some(
+                                      (record) => record.present
+                                    )
+                                      ? "#8CD991"
+                                      : "#FB9393",
+                                  }}
+                                >
                                   {records.some((record) => record.present)
                                     ? "Present"
                                     : "Absent"}
@@ -205,10 +263,8 @@ const ShowStudent = () => {
             )}
           </div>
         </div>
-      ) : (
-        <div>No student found</div>
-      )}
-    </div>
+      </div>
+    </>
   );
 };
 

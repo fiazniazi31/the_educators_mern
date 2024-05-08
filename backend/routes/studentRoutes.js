@@ -65,6 +65,7 @@ router.get("/:id", async (request, response) => {
       class: student.class,
       subjects: student.subjects,
       feeRecords: student.feeRecords,
+      testRecords: student.testRecords,
       attendance: student.attendance,
     });
   } catch (error) {
