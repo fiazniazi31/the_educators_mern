@@ -65,6 +65,7 @@ router.get("/:id", async (request, response) => {
       class: student.class,
       subjects: student.subjects,
       feeRecords: student.feeRecords,
+      testRecords: student.testRecords,
       attendance: student.attendance,
     });
   } catch (error) {
@@ -132,11 +133,11 @@ router.delete("/:id", async (request, response) => {
 router.post("/:id/addTest", async (request, response) => {
   try {
     const { id } = request.params;
-    const { subject, obtainMarks, totalMarks } = request.body;
+    const { subject, obtainMarks, totalMarks, date } = request.body; // Include test date
 
-    if (!subject || !obtainMarks || !totalMarks) {
+    if (!subject || !obtainMarks || !totalMarks || !date) {
       return response.status(400).send({
-        message: `Send all required fields: Subject, Total Marks, and Obtain Marks`,
+        message: `Send all required fields: Subject, Total Marks, Obtain Marks, and Date`,
       });
     }
 
@@ -151,12 +152,42 @@ router.post("/:id/addTest", async (request, response) => {
       student.testRecords = [];
     }
 
-    student.testRecords.push({ subject, obtainMarks, totalMarks });
+    student.testRecords.push({ subject, obtainMarks, totalMarks, date }); // Include date in test record
     await student.save();
 
     return response
       .status(201)
       .json({ message: "Test record added successfully" });
+  } catch (error) {
+    console.error(error.message);
+    return response.status(500).json({ message: "Server error" });
+  }
+});
+
+// Route to delete a test record
+router.delete("/:id/test/:testId", async (request, response) => {
+  try {
+    const { id, testId } = request.params;
+    const student = await Student.findById(id);
+
+    if (!student) {
+      return response.status(404).json({ message: "Student not found" });
+    }
+
+    const testRecordIndex = student.testRecords.findIndex(
+      (record) => record._id.toString() === testId
+    );
+
+    if (testRecordIndex === -1) {
+      return response.status(404).json({ message: "Test record not found" });
+    }
+
+    student.testRecords.splice(testRecordIndex, 1);
+    await student.save();
+
+    return response
+      .status(200)
+      .json({ message: "Test record deleted successfully" });
   } catch (error) {
     console.error(error.message);
     return response.status(500).json({ message: "Server error" });

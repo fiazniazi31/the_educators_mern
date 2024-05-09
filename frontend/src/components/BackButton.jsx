@@ -13,15 +13,17 @@ const BackButton = ({ destination = "/" }) => {
     <div>
       <Link
         to={destination}
-        style={{
-          backgroundColor: "skyblue",
-          color: "white",
-          padding: "5px 10px",
-          borderRadius: "5px",
-          fontSize: "1.5rem",
-        }}
+        // style={{
+        //   backgroundColor: "skyblue",
+        //   color: "white",
+        //   padding: "5px 10px",
+        //   borderRadius: "5px",
+        //   fontSize: "1.5rem",
+        // }}
+        className="btn btn-primary"
       >
-        <BsArrowLeft />
+        {/* <BsArrowLeft /> */}
+        Home
       </Link>
     </div>
   );

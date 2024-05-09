@@ -32,6 +32,7 @@ const studentSchema = mongoose.Schema(
         subject: { type: String, required: true },
         obtainMarks: { type: Number, required: true },
         totalMarks: { type: Number, required: true },
+        date: { type: Date, required: true },
       },
     ],
     attendance: [
