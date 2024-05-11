@@ -194,6 +194,28 @@ router.delete("/:id/test/:testId", async (request, response) => {
   }
 });
 
+// Route to delete all test records of a student
+router.delete("/:id/test", async (request, response) => {
+  try {
+    const { id } = request.params;
+    const student = await Student.findById(id);
+
+    if (!student) {
+      return response.status(404).json({ message: "Student not found" });
+    }
+
+    student.testRecords = []; // Remove all test records
+    await student.save();
+
+    return response
+      .status(200)
+      .json({ message: "All test records deleted successfully" });
+  } catch (error) {
+    console.error(error.message);
+    return response.status(500).json({ message: "Server error" });
+  }
+});
+
 // Route to add a fee record
 router.post("/:id/fee", async (request, response) => {
   try {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { MdOutlineDelete } from "react-icons/md";
 import Spinner from "../../components/Spinner";
 
@@ -8,6 +8,7 @@ const ShowStudentTestRecords = () => {
   const { id } = useParams(); // Get the student ID from URL params
   const [testRecords, setTestRecords] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -44,6 +45,22 @@ const ShowStudentTestRecords = () => {
     return (obtainMarks / totalMarks) * 100;
   };
 
+  const handleDeleteAllTestRecords = () => {
+    axios
+      .delete(`http://localhost:5555/student/${id}/test`)
+      .then((response) => {
+        console.log(response.data);
+        // Update the testRecords state after successful deletion
+        setTestRecords([]);
+        navigate(`/student/details/${id}`, { replace: true });
+        alert("All tests record deleted successfully");
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Failed to delete tests record. Please check the console.");
+      });
+  };
+
   return (
     <div style={{ padding: "4px" }}>
       <h1>Student Test Records</h1>
@@ -51,6 +68,14 @@ const ShowStudentTestRecords = () => {
         <Spinner />
       ) : testRecords && testRecords.length > 0 ? (
         <div>
+          <div>
+            <button
+              onClick={handleDeleteAllTestRecords}
+              className="btn btn-danger"
+            >
+              Delete All Test Records
+            </button>
+          </div>
           {Object.entries(groupTestRecordsBySubject(testRecords)).map(
             ([subject, records]) => (
               <div key={subject} style={{ display: "flex" }}>
@@ -100,9 +125,11 @@ const ShowStudentTestRecords = () => {
                                   (rec) => rec._id !== record._id
                                 )
                               );
+                              alert(`Test record deleted successfully`);
                             })
                             .catch((error) => {
                               console.log(error);
+                              alert(`Test record not deleted. See console`);
                             });
                         }}
                         className="btn btn-outline-danger"
