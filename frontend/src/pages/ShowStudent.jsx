@@ -5,7 +5,6 @@ import BackButton from "../components/BackButton";
 import Spinner from "../components/Spinner";
 import { Link } from "react-router-dom";
 import { MdOutlineDelete } from "react-icons/md";
-import ShowStudentTests from "./student/ShowStudentTests ";
 
 const ShowStudent = () => {
   const [student, setStudent] = useState({});

@@ -29,6 +29,17 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <div className="col-md-4">
+        <div className="card">
+          <div className="card-body">
+            <h5 className="card-title">Student</h5>
+            <p className="card-text">Login for Student</p>
+            <Link to="/StudentLogin" className="btn btn-primary">
+              Login
+            </Link>
+          </div>
+        </div>
+      </div>
       <div className="col-md-6">
         <div className="card">
           <div className="card-body">

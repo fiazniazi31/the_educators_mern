@@ -11,12 +11,13 @@ import ShowAllTeachers from "./pages/ShowAllTeachers";
 import DeleteTeacher from "./pages/DeleteTeacher";
 import EditTeacher from "./pages/EditTeacher";
 import ShowTeacher from "./pages/ShowTeacher";
-// import ManageFee from "./pages/ManageFee";
 import CreateFeeRecord from "./pages/CreateFeeRecord";
 import AddStudentTest from "./pages/student/addTestRecord";
 import ShowStudentTestRecords from "./pages/student/ShowStudentTests ";
-import Login from "./pages/Login";
+import Login from "./pages/teacher/Login";
+import StudentLogin from "./pages/student/StudentLogin";
 import TeacherHome from "./pages/teacher/TeacherHome";
+import StudnetHome from "./pages/student/StudnetHome";
 
 function App() {
   return (
@@ -40,7 +41,9 @@ function App() {
       <Route path="/teacher/edit/:id" element={<EditTeacher />} />
       <Route path="/teacher/details/:id" element={<ShowTeacher />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/StudentLogin" element={<StudentLogin />} />
       <Route path="/teacher/home" element={<TeacherHome />} />
+      <Route path="/studnet/home" element={<StudnetHome />} />
     </Routes>
   );
 }

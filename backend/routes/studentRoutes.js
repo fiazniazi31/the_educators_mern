@@ -6,14 +6,23 @@ const router = express.Router();
 // Route to add a new student
 router.post("/", async (request, response) => {
   try {
-    const { name, fatherName, class: className, subjects } = request.body;
+    const {
+      name,
+      fatherName,
+      class: className,
+      subjects,
+      username,
+      password,
+    } = request.body;
 
     if (
       !name ||
       !fatherName ||
       !className ||
       !subjects ||
-      subjects.length === 0
+      subjects.length === 0 ||
+      !username ||
+      !password
     ) {
       return response.status(400).send({
         message: `Send all required fields: Name, Father Name, Class, and at least one Subject`,
@@ -25,6 +34,8 @@ router.post("/", async (request, response) => {
       fatherName,
       class: className,
       subjects,
+      username,
+      password,
     };
 
     const student = await Student.create(newStudent);
@@ -67,6 +78,8 @@ router.get("/:id", async (request, response) => {
       feeRecords: student.feeRecords,
       testRecords: student.testRecords,
       attendance: student.attendance,
+      username: student.username,
+      password: student.password,
     });
   } catch (error) {
     console.error(error.message);
@@ -78,9 +91,16 @@ router.get("/:id", async (request, response) => {
 router.put("/:id", async (request, response) => {
   try {
     const { id } = request.params;
-    const { name, fatherName, class: className, subjects } = request.body;
+    const {
+      name,
+      fatherName,
+      class: className,
+      subjects,
+      username,
+      password,
+    } = request.body;
 
-    if (!name || !fatherName || !className) {
+    if (!name || !fatherName || !className || !username || !password) {
       return response.status(400).send({
         message: `Send all required fields: Name, Father Name & Class`,
       });
@@ -91,6 +111,8 @@ router.put("/:id", async (request, response) => {
       fatherName,
       class: className,
       subjects,
+      username,
+      password,
     };
 
     const result = await Student.findByIdAndUpdate(id, updatedStudent, {
@@ -345,5 +367,26 @@ router.get("/:id/attendance", async (request, response) => {
     return response.status(500).json({ message: "Server error" });
   }
 });
+
+// login
+router.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  const student = await Student.findOne({ username, password });
+  if (student) {
+    res.status(200).json({ message: "Login successful", student });
+  } else {
+    res.status(401).json({ message: "Invalid username or password" });
+  }
+});
+// // Route to handle student login
+// router.post("/login", async (req, res) => {
+//   const { username, password } = req.body;
+//   const student = await Student.findOne({ username, password });
+//   if (student) {
+//     res.status(200).json({ message: "Login successful", student });
+//   } else {
+//     res.status(401).json({ message: "Invalid username or password" });
+//   }
+// });
 
 export default router;

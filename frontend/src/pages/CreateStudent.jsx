@@ -20,6 +20,8 @@ const CreateStudent = () => {
     TQ: false,
     Economics: false,
   });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -40,6 +42,8 @@ const CreateStudent = () => {
       fatherName: fatherName,
       class: classValue,
       subjects: selectedSubjects,
+      username: username,
+      password: password,
     };
 
     setLoading(true);
@@ -96,6 +100,30 @@ const CreateStudent = () => {
             value={classValue}
             onChange={(e) => setClass(e.target.value)}
           />
+        </div>
+        <div className="mb-3" style={{ textAlign: "left" }}>
+          <label htmlFor="username" className="form-label">
+            Username
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <div className="mb-3" style={{ textAlign: "left" }}>
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
         </div>
         <div className="mb-3" style={{ textAlign: "left" }}>
           <label>Subjects:</label>
