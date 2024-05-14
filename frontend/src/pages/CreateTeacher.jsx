@@ -11,10 +11,33 @@ const CreateTeacher = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [qualification, setQualification] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [passwordError, setPasswordError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handelSaveTeacher = () => {
+    // Validate password
+    if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters");
+      return;
+    } else {
+      setPasswordError("");
+    }
+
+    // Validate username
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(username)) {
+      setUsernameError("Username must be in email format");
+      return;
+    } else {
+      setUsernameError("");
+    }
+
     const data = {
       name: name,
       subject: subject,
@@ -22,6 +45,8 @@ const CreateTeacher = () => {
       phone: phone,
       address: address,
       qualification: qualification,
+      username: username,
+      password: password,
     };
 
     setLoading(true);
@@ -113,6 +138,45 @@ const CreateTeacher = () => {
               value={qualification}
               onChange={(e) => setQualification(e.target.value)}
             />
+          </div>
+          <div className="mb-3" style={{ textAlign: "left" }}>
+            <label htmlFor="username" className="form-label">
+              Username
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            {usernameError && (
+              <div className="text-danger">{usernameError}</div>
+            )}
+          </div>
+          <div className="mb-3" style={{ textAlign: "left" }}>
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
+            <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="form-control"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+            {passwordError && (
+              <div className="text-danger">{passwordError}</div>
+            )}
           </div>
         </div>
         <div className="d-grid gap-2 col-6 mx-auto">

@@ -11,6 +11,10 @@ const EditTeacher = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [qualification, setQualification] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
@@ -26,6 +30,8 @@ const EditTeacher = () => {
         setPhone(responce.data.phone);
         setAddress(responce.data.address);
         setQualification(responce.data.qualification);
+        setUsername(responce.data.username);
+        setPassword(responce.data.password);
         setLoading(false);
       })
       .catch((error) => {
@@ -43,6 +49,8 @@ const EditTeacher = () => {
       phone: phone,
       address: address,
       qualification: qualification,
+      username: username,
+      password: password,
     };
 
     setLoading(true);
@@ -134,6 +142,37 @@ const EditTeacher = () => {
               value={qualification}
               onChange={(e) => setQualification(e.target.value)}
             />
+          </div>
+          <div className="mb-3" style={{ textAlign: "left" }}>
+            <label htmlFor="username" className="form-label">
+              Username
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="mb-3" style={{ textAlign: "left" }}>
+            <label htmlFor="Password" className="form-label">
+              Password
+            </label>
+            <input
+              type={showPassword ? "text" : "password"}
+              className="form-control"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button
+              className="btn btn-outline-secondary"
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
           </div>
         </div>
         <div className="d-grid gap-2 col-6 mx-auto">

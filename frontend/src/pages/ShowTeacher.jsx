@@ -71,6 +71,14 @@ const ShowTeacher = () => {
             <span>Age: </span>
             <span>{teacher.qualification}</span>
           </div>
+          <div style={{ marginBottom: "10px", textAlign: "left" }}>
+            <span>Username: </span>
+            <span>{teacher.username}</span>
+          </div>
+          <div style={{ marginBottom: "10px", textAlign: "left" }}>
+            <span>Password: </span>
+            <span>{teacher.password}</span>
+          </div>
         </div>
       ) : (
         <div>No student found</div>

@@ -15,6 +15,8 @@ import ShowTeacher from "./pages/ShowTeacher";
 import CreateFeeRecord from "./pages/CreateFeeRecord";
 import AddStudentTest from "./pages/student/addTestRecord";
 import ShowStudentTestRecords from "./pages/student/ShowStudentTests ";
+import Login from "./pages/Login";
+import TeacherHome from "./pages/teacher/TeacherHome";
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
       <Route path="/teacher/delete/:id" element={<DeleteTeacher />} />
       <Route path="/teacher/edit/:id" element={<EditTeacher />} />
       <Route path="/teacher/details/:id" element={<ShowTeacher />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/teacher/home" element={<TeacherHome />} />
     </Routes>
   );
 }

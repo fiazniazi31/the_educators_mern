@@ -6,7 +6,16 @@ const router = express.Router();
 // Create a new teacher
 router.post("/", async (req, res) => {
   try {
-    const { name, subject, age, phone, address, qualification } = req.body;
+    const {
+      name,
+      subject,
+      age,
+      phone,
+      address,
+      qualification,
+      username,
+      password,
+    } = req.body;
     const teacher = new Teacher({
       name,
       subject,
@@ -14,6 +23,8 @@ router.post("/", async (req, res) => {
       phone,
       address,
       qualification,
+      username,
+      password,
     });
     await teacher.save();
     res.status(201).json(teacher);
@@ -51,7 +62,16 @@ router.get("/:id", async (req, res) => {
 // Update a teacher by ID
 router.put("/:id", async (req, res) => {
   try {
-    const { name, subject, age, phoneNo, address, qualification } = req.body;
+    const {
+      name,
+      subject,
+      age,
+      phoneNo,
+      address,
+      qualification,
+      username,
+      password,
+    } = req.body;
     const updatedTeacher = {
       name,
       subject,
@@ -59,6 +79,8 @@ router.put("/:id", async (req, res) => {
       phoneNo,
       address,
       qualification,
+      username,
+      password,
     };
     const teacher = await Teacher.findByIdAndUpdate(
       req.params.id,
@@ -83,6 +105,34 @@ router.delete("/:id", async (req, res) => {
       return res.status(404).json({ message: "Teacher not found" });
     }
     res.status(200).json({ message: "Teacher deleted successfully" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// login
+router.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  const teacher = await Teacher.findOne({ username, password });
+  if (teacher) {
+    res.status(200).json({ message: "Login successful", teacher });
+  } else {
+    res.status(401).json({ message: "Invalid username or password" });
+  }
+});
+
+// Mark attendance (in or out)
+router.post("/:id/attendance", async (req, res) => {
+  try {
+    const { type, date } = req.body;
+    const teacher = await Teacher.findById(req.params.id);
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found" });
+    }
+    teacher.attendance.push({ type, date });
+    await teacher.save();
+    res.status(201).json({ message: "Attendance marked successfully" });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
