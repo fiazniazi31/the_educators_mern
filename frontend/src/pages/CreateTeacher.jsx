@@ -47,6 +47,7 @@ const CreateTeacher = () => {
       qualification: qualification,
       username: username,
       password: password,
+      type: "teacher",
     };
 
     setLoading(true);

@@ -1,9 +1,55 @@
 import express from "express";
 import { Student } from "../models/studentsModel.js";
+import { User } from "../models/usersModel.js";
 
 const router = express.Router();
 
 // Route to add a new student
+// router.post("/", async (request, response) => {
+//   try {
+//     const {
+//       name,
+//       fatherName,
+//       class: className,
+//       subjects,
+//       username,
+//       password,
+//       type,
+//     } = request.body;
+
+//     if (
+//       !name ||
+//       !fatherName ||
+//       !className ||
+//       !subjects ||
+//       subjects.length === 0 ||
+//       !username ||
+//       !password ||
+//       !type
+//     ) {
+//       return response.status(400).send({
+//         message: `Send all required fields: Name, Father Name, Class, and at least one Subject`,
+//       });
+//     }
+
+//     const newStudent = {
+//       name,
+//       fatherName,
+//       class: className,
+//       subjects,
+//       username,
+//       password,
+//       type,
+//     };
+
+//     const student = await Student.create(newStudent);
+//     return response.status(201).json(student); // Use 201 Created status for successful creation
+//   } catch (error) {
+//     console.error(error.message);
+//     return response.status(500).json({ message: "Server error" });
+//   }
+// });
+// Route to create a new student
 router.post("/", async (request, response) => {
   try {
     const {
@@ -13,6 +59,7 @@ router.post("/", async (request, response) => {
       subjects,
       username,
       password,
+      type,
     } = request.body;
 
     if (
@@ -22,20 +69,28 @@ router.post("/", async (request, response) => {
       !subjects ||
       subjects.length === 0 ||
       !username ||
-      !password
+      !password ||
+      !type
     ) {
       return response.status(400).send({
         message: `Send all required fields: Name, Father Name, Class, and at least one Subject`,
       });
     }
 
+    const newUser = new User({
+      username,
+      password,
+      type,
+    });
+
+    const savedUser = await newUser.save();
+
     const newStudent = {
       name,
       fatherName,
       class: className,
       subjects,
-      username,
-      password,
+      user: savedUser._id,
     };
 
     const student = await Student.create(newStudent);
@@ -100,12 +155,11 @@ router.put("/:id", async (request, response) => {
       password,
     } = request.body;
 
-    if (!name || !fatherName || !className || !username || !password) {
+    if (!name || !fatherName || !className) {
       return response.status(400).send({
         message: `Send all required fields: Name, Father Name & Class`,
       });
     }
-
     const updatedStudent = {
       name,
       fatherName,
@@ -371,13 +425,23 @@ router.get("/:id/attendance", async (request, response) => {
 // login
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  const student = await Student.findOne({ username, password });
-  if (student) {
-    res.status(200).json({ message: "Login successful", student });
-  } else {
-    res.status(401).json({ message: "Invalid username or password" });
+  try {
+    const user = await User.findOne({ username, password });
+    if (user) {
+      res.status(200).json({
+        message: "Login successful",
+        userId: user._id,
+        userType: user.type,
+      });
+    } else {
+      res.status(401).json({ message: "Invalid username or password" });
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Server error" });
   }
 });
+
 // // Route to handle student login
 // router.post("/login", async (req, res) => {
 //   const { username, password } = req.body;
@@ -388,5 +452,22 @@ router.post("/login", async (req, res) => {
 //     res.status(401).json({ message: "Invalid username or password" });
 //   }
 // });
+
+// Define a route to fetch a student record based on the user ID
+router.get("/user/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    // Find the student record in the database based on the user ID
+    const student = await Student.findOne({ user: userId });
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    // Return the student record as a response
+    res.status(200).json(student);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 export default router;

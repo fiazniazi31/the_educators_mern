@@ -1,8 +1,41 @@
 import express from "express";
 import { Teacher } from "../models/teacherModel.js";
+import { User } from "../models/usersModel.js";
 
 const router = express.Router();
 
+// // Create a new teacher
+// router.post("/", async (req, res) => {
+//   try {
+//     const {
+//       name,
+//       subject,
+//       age,
+//       phone,
+//       address,
+//       qualification,
+//       username,
+//       password,
+//       type,
+//     } = req.body;
+//     const teacher = new Teacher({
+//       name,
+//       subject,
+//       age,
+//       phone,
+//       address,
+//       qualification,
+//       username,
+//       password,
+//       type,
+//     });
+//     await teacher.save();
+//     res.status(201).json(teacher);
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send("Server Error");
+//   }
+// });
 // Create a new teacher
 router.post("/", async (req, res) => {
   try {
@@ -16,6 +49,12 @@ router.post("/", async (req, res) => {
       username,
       password,
     } = req.body;
+
+    // Create a new user
+    const user = new User({ username, password, type: "teacher" });
+    await user.save();
+
+    // Create a new teacher with the user ID
     const teacher = new Teacher({
       name,
       subject,
@@ -25,8 +64,10 @@ router.post("/", async (req, res) => {
       qualification,
       username,
       password,
+      user: user._id,
     });
     await teacher.save();
+
     res.status(201).json(teacher);
   } catch (error) {
     console.error(error.message);
@@ -111,10 +152,21 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// // login
+// router.post("/login", async (req, res) => {
+//   const { username, password } = req.body;
+//   const teacher = await Teacher.findOne({ username, password });
+//   if (teacher) {
+//     res.status(200).json({ message: "Login successful", teacher });
+//   } else {
+//     res.status(401).json({ message: "Invalid username or password" });
+//   }
+// });
+
 // login
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  const teacher = await Teacher.findOne({ username, password });
+  const teacher = await User.findOne({ username, password });
   if (teacher) {
     res.status(200).json({ message: "Login successful", teacher });
   } else {
@@ -122,17 +174,41 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Mark attendance (in or out)
-router.post("/:id/attendance", async (req, res) => {
+// Mark attendance for a teacher
+router.post("/:teacherId/attendance", async (req, res) => {
   try {
+    const teacherId = req.params.teacherId;
     const { type, date } = req.body;
-    const teacher = await Teacher.findById(req.params.id);
+
+    // Find the teacher by teacherId
+    const teacher = await Teacher.findById(teacherId);
+
     if (!teacher) {
       return res.status(404).json({ message: "Teacher not found" });
     }
+
+    // Update the teacher's attendance record
     teacher.attendance.push({ type, date });
     await teacher.save();
-    res.status(201).json({ message: "Attendance marked successfully" });
+
+    res.status(200).json({ message: "Attendance marked successfully" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// Get teacher details by userId
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const teacher = await Teacher.findOne({ user: userId });
+
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found" });
+    }
+
+    res.json(teacher);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

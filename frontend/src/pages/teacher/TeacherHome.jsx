@@ -15,7 +15,7 @@ const TeacherHome = () => {
       navigate("/login");
     } else {
       axios
-        .get(`http://localhost:5555/teacher/${teacherId}`)
+        .get(`http://localhost:5555/teacher/user/${teacherId}`)
         .then((response) => {
           setTeacher(response.data);
           setLoading(false);
@@ -32,6 +32,7 @@ const TeacherHome = () => {
       type,
       date: new Date().toISOString(),
     };
+
     axios
       .post(
         `http://localhost:5555/teacher/${teacher._id}/attendance`,

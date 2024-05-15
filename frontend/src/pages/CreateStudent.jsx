@@ -44,6 +44,7 @@ const CreateStudent = () => {
       subjects: selectedSubjects,
       username: username,
       password: password,
+      type: "studnet",
     };
 
     setLoading(true);

@@ -62,6 +62,10 @@ const EditStudent = () => {
       subjects: selectedSubjects,
     };
 
+    if (!name || !fatherName || !clas) {
+      alert("Please fill in all required fields: Name, Father Name, and Class");
+      return;
+    }
     setLoading(true);
     axios
       .put(`http://localhost:5555/student/${id}`, data)
@@ -70,9 +74,19 @@ const EditStudent = () => {
         navigate("/");
       })
       .catch((error) => {
-        console.log(error);
-        alert("Please Check Colsole");
         setLoading(false);
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          alert("Server Error: " + error.response.data.message);
+        } else if (error.request) {
+          console.log(error.request);
+          alert("No response from server");
+        } else {
+          console.log("Error", error.message);
+          alert("Error: " + error.message);
+        }
       });
   };
 

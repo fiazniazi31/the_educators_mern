@@ -9,13 +9,20 @@ const StudentLogin = () => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
+    console.log({ username, password });
     axios
       .post("http://localhost:5555/student/login", { username, password })
       .then((response) => {
-        // Store the logged-in student's ID in localStorage
-        localStorage.setItem("studnetId", response.data.student._id);
-        // Handle successful login
-        navigate("/studnet/home"); // Redirect to dashboard or home page
+        // Check if the response contains userId and userType
+        if (response.data.userId && response.data.userType === "studnet") {
+          // Store the logged-in student's ID in localStorage
+          localStorage.setItem("userId", response.data.userId);
+
+          // Handle successful login
+          navigate("/studnet/home"); // Redirect to dashboard or home page
+        } else {
+          setError("Invalid response format");
+        }
       })
       .catch((error) => {
         console.log(error);

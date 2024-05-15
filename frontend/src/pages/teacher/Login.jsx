@@ -8,18 +8,34 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // const handleLogin = () => {
+  //   axios
+  //     .post("http://localhost:5555/teacher/login", { username, password })
+  //     .then((response) => {
+  //       // Store the logged-in teacher's ID in localStorage
+  //       localStorage.setItem("teacherId", response.data.teacher._id);
+  //       // Handle successful login
+  //       navigate("/teacher/home"); // Redirect to dashboard or home page
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       setError("Invalid username or password");
+  //     });
+  // };
+
   const handleLogin = () => {
     axios
       .post("http://localhost:5555/teacher/login", { username, password })
       .then((response) => {
-        // Store the logged-in teacher's ID in localStorage
         localStorage.setItem("teacherId", response.data.teacher._id);
-        // Handle successful login
-        navigate("/teacher/home"); // Redirect to dashboard or home page
+        navigate("/teacher/home");
       })
       .catch((error) => {
-        console.log(error);
-        setError("Invalid username or password");
+        if (error.response.status === 401) {
+          setError("Invalid username or password");
+        } else {
+          setError("An error occurred. Please try again later.");
+        }
       });
   };
 
