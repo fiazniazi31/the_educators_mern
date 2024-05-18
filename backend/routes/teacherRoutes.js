@@ -138,17 +138,45 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a teacher by ID
-router.delete("/:id", async (req, res) => {
+// // Delete a teacher by ID
+// router.delete("/:id", async (req, res) => {
+//   try {
+//     const teacher = await Teacher.findByIdAndDelete(req.params.id);
+//     if (!teacher) {
+//       return res.status(404).json({ message: "Teacher not found" });
+//     }
+//     res.status(200).json({ message: "Teacher deleted successfully" });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send("Server Error");
+//   }
+// });
+
+// Route to delete a teacher
+router.delete("/:id", async (request, response) => {
   try {
-    const teacher = await Teacher.findByIdAndDelete(req.params.id);
+    const { id } = request.params;
+
+    const teacher = await Teacher.findById(id);
     if (!teacher) {
-      return res.status(404).json({ message: "Teacher not found" });
+      return response.status(404).json({ message: "Teacher not found" });
     }
-    res.status(200).json({ message: "Teacher deleted successfully" });
+
+    // Find the user associated with the teacher
+    const user = await User.findOne({ _id: teacher.user });
+
+    // Delete the teacher and the associated user
+    await Promise.all([
+      Teacher.findByIdAndDelete(id),
+      user ? User.findByIdAndDelete(user._id) : null,
+    ]);
+
+    return response
+      .status(200)
+      .json({ message: "Teacher deleted successfully" });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return response.status(500).json({ message: "Server error" });
   }
 });
 

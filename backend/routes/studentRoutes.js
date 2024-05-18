@@ -186,15 +186,43 @@ router.put("/:id", async (request, response) => {
   }
 });
 
+// // Route to delete a student
+// router.delete("/:id", async (request, response) => {
+//   try {
+//     const { id } = request.params;
+//     const result = await Student.findByIdAndDelete(id);
+
+//     if (!result) {
+//       return response.status(404).json({ message: "Student not found" });
+//     }
+
+//     return response
+//       .status(200)
+//       .json({ message: "Student deleted successfully" });
+//   } catch (error) {
+//     console.error(error.message);
+//     return response.status(500).json({ message: "Server error" });
+//   }
+// });
+
 // Route to delete a student
 router.delete("/:id", async (request, response) => {
   try {
     const { id } = request.params;
-    const result = await Student.findByIdAndDelete(id);
 
-    if (!result) {
+    const student = await Student.findById(id);
+    if (!student) {
       return response.status(404).json({ message: "Student not found" });
     }
+
+    // Find the user associated with the student
+    const user = await User.findOne({ _id: student.user });
+
+    // Delete the student and the associated user
+    await Promise.all([
+      Student.findByIdAndDelete(id),
+      user ? User.findByIdAndDelete(user._id) : null,
+    ]);
 
     return response
       .status(200)

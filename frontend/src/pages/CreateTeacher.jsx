@@ -55,7 +55,7 @@ const CreateTeacher = () => {
       .post(`http://localhost:5555/teacher`, data)
       .then(() => {
         setLoading(false);
-        navigate("/");
+        navigate("/home");
       })
       .catch((error) => {
         console.log(error);

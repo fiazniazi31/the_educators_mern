@@ -1,13 +1,32 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate("/");
+  };
   return (
     <div className="container mt-4">
-      <h1>Welcome to the Student and Teacher Management System</h1>
-      <div className="row mt-4">
+      <div className="row">
+        <div className="col-md-8 mx-auto text-center">
+          <button className="btn btn-primary" onClick={handleLogout}>
+            Log Out
+          </button>
+          <h1 className="mb-4">
+            Welcome to the Student and Teacher Management System
+          </h1>
+          <p className="lead">
+            Manage student and teacher records efficiently.
+          </p>
+        </div>
+      </div>
+
+      <div className="row mt-5">
         <div className="col-md-6">
-          <div className="card">
+          <div className="card shadow-sm">
             <div className="card-body">
               <h5 className="card-title">Students</h5>
               <p className="card-text">Manage student records.</p>
@@ -18,7 +37,7 @@ const Home = () => {
           </div>
         </div>
         <div className="col-md-6">
-          <div className="card">
+          <div className="card shadow-sm">
             <div className="card-body">
               <h5 className="card-title">Teachers</h5>
               <p className="card-text">Manage teacher records.</p>
@@ -26,28 +45,6 @@ const Home = () => {
                 View Teachers
               </Link>
             </div>
-          </div>
-        </div>
-      </div>
-      <div className="col-md-4">
-        <div className="card">
-          <div className="card-body">
-            <h5 className="card-title">Student</h5>
-            <p className="card-text">Login for Student</p>
-            <Link to="/StudentLogin" className="btn btn-primary">
-              Login
-            </Link>
-          </div>
-        </div>
-      </div>
-      <div className="col-md-6">
-        <div className="card">
-          <div className="card-body">
-            <h5 className="card-title">Teachers</h5>
-            <p className="card-text">Login for Teacher.</p>
-            <Link to="/login" className="btn btn-primary">
-              Login
-            </Link>
           </div>
         </div>
       </div>

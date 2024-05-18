@@ -2,36 +2,21 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const AdminLogin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // const handleLogin = () => {
-  //   axios
-  //     .post("http://localhost:5555/teacher/login", { username, password })
-  //     .then((response) => {
-  //       // Store the logged-in teacher's ID in localStorage
-  //       localStorage.setItem("teacherId", response.data.teacher._id);
-  //       // Handle successful login
-  //       navigate("/teacher/home"); // Redirect to dashboard or home page
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       setError("Invalid username or password");
-  //     });
-  // };
-
-  const handleLogin = () => {
+  const handleAdminLogin = () => {
     axios
-      .post("http://localhost:5555/teacher/login", { username, password })
+      .post("http://localhost:5555/admin/adminLogin", { username, password })
       .then((response) => {
-        localStorage.setItem("teacherId", response.data.teacher._id);
+        localStorage.setItem("adminId", response.data.admin._id);
         navigate("/home");
       })
       .catch((error) => {
-        if (error.response.status === 401) {
+        if (error.response && error.response.status === 401) {
           setError("Invalid username or password");
         } else {
           setError("An error occurred. Please try again later.");
@@ -41,7 +26,7 @@ const Login = () => {
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2>Admin Login</h2>
       {error && <div className="alert alert-danger">{error}</div>}
       <div className="mb-3">
         <label htmlFor="username" className="form-label">
@@ -67,11 +52,11 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <button className="btn btn-primary" onClick={handleLogin}>
+      <button className="btn btn-primary" onClick={handleAdminLogin}>
         Login
       </button>
     </div>
   );
 };
 
-export default Login;
+export default AdminLogin;

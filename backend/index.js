@@ -52,6 +52,7 @@ import mongoose from "mongoose";
 import express from "express";
 import studentRoutes from "./routes/studentRoutes.js";
 import teacherRoutes from "./routes/teacherRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 import cors from "cors";
 
 const app = express();
@@ -65,6 +66,7 @@ app.get("/", (req, res) => {
 
 app.use("/student", studentRoutes);
 app.use("/teacher", teacherRoutes);
+app.use("/admin", adminRoutes);
 
 mongoose
   .connect(mongoDBURL)

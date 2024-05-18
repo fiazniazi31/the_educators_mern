@@ -32,7 +32,7 @@ const StudentLogin = () => {
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2>Student Login</h2>
       {error && <div className="alert alert-danger">{error}</div>}
       <div className="mb-3">
         <label htmlFor="username" className="form-label">
