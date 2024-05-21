@@ -68,11 +68,11 @@ const EditTeacher = () => {
   };
 
   return (
-    <div style={{ padding: "4px" }}>
-      <BackButton />
-      <h1>Edit Teacher</h1>
-      <div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
+    <div className="d-flex flex-column align-items-center justify-content-center">
+      <div className="w-100" style={{ maxWidth: "600px" }}>
+        <BackButton />
+        <h1 className="text-center">Edit Teacher</h1>
+        <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name
           </label>
@@ -84,7 +84,7 @@ const EditTeacher = () => {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
+        <div className="mb-3">
           <label htmlFor="subject" className="form-label">
             Subject
           </label>
@@ -96,7 +96,7 @@ const EditTeacher = () => {
             onChange={(e) => setSubject(e.target.value)}
           />
         </div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
+        <div className="mb-3">
           <label htmlFor="age" className="form-label">
             Age
           </label>
@@ -107,58 +107,60 @@ const EditTeacher = () => {
             value={age}
             onChange={(e) => setAge(e.target.value)}
           />
-          <div className="mb-3" style={{ textAlign: "left" }}>
-            <label htmlFor="phone" className="form-label">
-              Phone
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
-          <div className="mb-3" style={{ textAlign: "left" }}>
-            <label htmlFor="address" className="form-label">
-              Address
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-          </div>
-          <div className="mb-3" style={{ textAlign: "left" }}>
-            <label htmlFor="qualification" className="form-label">
-              Qualification
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="qualification"
-              value={qualification}
-              onChange={(e) => setQualification(e.target.value)}
-            />
-          </div>
-          <div className="mb-3" style={{ textAlign: "left" }}>
-            <label htmlFor="username" className="form-label">
-              Username
-            </label>
-            <input
-              type="email"
-              className="form-control"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <div className="mb-3" style={{ textAlign: "left" }}>
-            <label htmlFor="Password" className="form-label">
-              Password
-            </label>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="phone" className="form-label">
+            Phone
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="address" className="form-label">
+            Address
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="qualification" className="form-label">
+            Qualification
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="qualification"
+            value={qualification}
+            onChange={(e) => setQualification(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="username" className="form-label">
+            Username
+          </label>
+          <input
+            type="email"
+            className="form-control"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
+          <div className="input-group">
             <input
               type={showPassword ? "text" : "password"}
               className="form-control"
@@ -175,11 +177,12 @@ const EditTeacher = () => {
             </button>
           </div>
         </div>
-        <div className="d-grid gap-2 col-6 mx-auto">
+        <div className="d-grid">
           <button
-            className="btn btn-primary"
+            className="btn btn-primary mx-auto"
             type="button"
             onClick={handelEditTeacher}
+            style={{ width: "150px" }}
           >
             Save
           </button>

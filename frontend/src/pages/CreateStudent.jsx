@@ -52,7 +52,7 @@ const CreateStudent = () => {
       .post(`http://localhost:5555/student`, data)
       .then(() => {
         setLoading(false);
-        navigate("/");
+        navigate("/student/showAllStudents");
       })
       .catch((error) => {
         console.log(error);
@@ -62,11 +62,11 @@ const CreateStudent = () => {
   };
 
   return (
-    <div style={{ padding: "4px" }}>
-      <BackButton />
-      <h1>Create Student</h1>
-      <div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
+    <div className="d-flex flex-column align-items-center justify-content-center">
+      <div className="w-100" style={{ maxWidth: "600px" }}>
+        <BackButton />
+        <h1 className="text-center">Create Student</h1>
+        <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name
           </label>
@@ -78,7 +78,7 @@ const CreateStudent = () => {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
+        <div className="mb-3">
           <label htmlFor="fatherName" className="form-label">
             Father Name
           </label>
@@ -90,7 +90,7 @@ const CreateStudent = () => {
             onChange={(e) => setFatherName(e.target.value)}
           />
         </div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
+        <div className="mb-3">
           <label htmlFor="class" className="form-label">
             Class
           </label>
@@ -102,7 +102,7 @@ const CreateStudent = () => {
             onChange={(e) => setClass(e.target.value)}
           />
         </div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
+        <div className="mb-3">
           <label htmlFor="username" className="form-label">
             Username
           </label>
@@ -113,20 +113,20 @@ const CreateStudent = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <div className="mb-3" style={{ textAlign: "left" }}>
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
         </div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
           <label>Subjects:</label>
           {Object.keys(subjects).map((subject) => (
             <div key={subject} className="form-check">
@@ -143,11 +143,12 @@ const CreateStudent = () => {
             </div>
           ))}
         </div>
-        <div className="d-grid gap-2 col-6 mx-auto">
+        <div className="d-grid">
           <button
-            className="btn btn-primary"
+            className="btn btn-primary mx-auto"
             type="button"
             onClick={handelSaveStudent}
+            style={{ width: "150px" }}
           >
             Save
           </button>

@@ -2,7 +2,7 @@ import React from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { useNavigate, Link } from "react-router-dom";
 
-const BackButton = ({ destination = "/" }) => {
+const BackButton = ({ destination = "/home" }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -10,7 +10,7 @@ const BackButton = ({ destination = "/" }) => {
   };
 
   return (
-    <div>
+    <div className="text-center">
       <Link
         to={destination}
         // style={{

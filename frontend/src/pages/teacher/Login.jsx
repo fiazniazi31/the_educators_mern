@@ -28,7 +28,7 @@ const Login = () => {
       .post("http://localhost:5555/teacher/login", { username, password })
       .then((response) => {
         localStorage.setItem("teacherId", response.data.teacher._id);
-        navigate("/home");
+        navigate("/teacher/home");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -40,36 +40,40 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      {error && <div className="alert alert-danger">{error}</div>}
-      <div className="mb-3">
-        <label htmlFor="username" className="form-label">
-          Username
-        </label>
-        <input
-          type="email"
-          className="form-control"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+    <div className="d-flex flex-column align-items-center justify-content-center">
+      <div className="w-100" style={{ maxWidth: "400px" }}>
+        <h2 className="text-center">Teacher Login</h2>
+        {error && <div className="alert alert-danger">{error}</div>}
+        <div className="mb-3">
+          <label htmlFor="username" className="form-label">
+            Username
+          </label>
+          <input
+            type="email"
+            className="form-control"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="d-grid">
+          <button className="btn btn-primary" onClick={handleLogin}>
+            Login
+          </button>
+        </div>
       </div>
-      <div className="mb-3">
-        <label htmlFor="password" className="form-label">
-          Password
-        </label>
-        <input
-          type="password"
-          className="form-control"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <button className="btn btn-primary" onClick={handleLogin}>
-        Login
-      </button>
     </div>
   );
 };

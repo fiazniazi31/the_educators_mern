@@ -29,12 +29,12 @@ const ShowAllTeachers = () => {
   useEffect(() => {
     setFilteredTeachers(
       teachers.filter((teacher) =>
-        teacher.name.toLowerCase().includes(nameFilter.toLowerCase())
+        teacher.subject.toLowerCase().includes(nameFilter.toLowerCase())
       )
     );
   }, [teachers, nameFilter]);
 
-  const handleClassFilterChange = (e) => {
+  const handleSubjectFilterChange = (e) => {
     setNameFilter(e.target.value);
   };
 
@@ -51,9 +51,9 @@ const ShowAllTeachers = () => {
         <div>
           <input
             type="text"
-            placeholder="Filter by class"
+            placeholder="Filter by Subject"
             value={nameFilter}
-            onChange={handleClassFilterChange}
+            onChange={handleSubjectFilterChange}
             style={{ marginRight: "10px" }}
           />
           <Link to="/teacher/create" style={{ fontSize: "1.5rem" }}>

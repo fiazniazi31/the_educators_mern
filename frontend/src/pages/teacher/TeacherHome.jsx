@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import BackButton from "../../components/BackButton";
 import Spinner from "../../components/Spinner";
 
 const TeacherHome = () => {
@@ -54,21 +53,35 @@ const TeacherHome = () => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        textAlign: "left",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       <button className="btn btn-primary" onClick={handleLogout}>
         Log Out
       </button>
-      <h1>Welcome, {teacher ? teacher.name : "Teacher"}</h1>
+
       {loading ? (
         <Spinner />
       ) : (
-        <div>
+        <div style={{ textAlign: "left" }}>
+          <h1>Welcome, {teacher ? teacher.name : "Teacher"}</h1>
           <p>Subject: {teacher ? teacher.subject : "-"}</p>
           <p>Age: {teacher ? teacher.age : "-"}</p>
           <p>Phone: {teacher ? teacher.phone : "-"}</p>
           <p>Address: {teacher ? teacher.address : "-"}</p>
           <p>Qualification: {teacher ? teacher.qualification : "-"}</p>
-          <div style={{ marginTop: "20px" }}>
+          <div
+            style={{
+              marginTop: "20px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             <button
               className="btn btn-success"
               onClick={() => markAttendance("in")}

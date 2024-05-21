@@ -99,11 +99,11 @@ const EditStudent = () => {
   };
 
   return (
-    <div style={{ padding: "4px" }}>
-      <BackButton />
-      <h1>Edit Student</h1>
-      <div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
+    <div className="d-flex flex-column align-items-center justify-content-center">
+      <div className="w-100" style={{ maxWidth: "600px" }}>
+        <BackButton />
+        <h1 className="text-center">Edit Student</h1>
+        <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name
           </label>
@@ -115,7 +115,7 @@ const EditStudent = () => {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
+        <div className="mb-3">
           <label htmlFor="fatherName" className="form-label">
             Father Name
           </label>
@@ -127,7 +127,7 @@ const EditStudent = () => {
             onChange={(e) => setFatherName(e.target.value)}
           />
         </div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
+        <div className="mb-3">
           <label htmlFor="class" className="form-label">
             Class
           </label>
@@ -139,7 +139,7 @@ const EditStudent = () => {
             onChange={(e) => setClas(e.target.value)}
           />
         </div>
-        <div className="mb-3" style={{ textAlign: "left" }}>
+        <div className="mb-3">
           <label>Subjects:</label>
           <div>
             {Object.keys(subjects).map((subject) => (
@@ -159,11 +159,12 @@ const EditStudent = () => {
             ))}
           </div>
         </div>
-        <div className="d-grid gap-2 col-6 mx-auto">
+        <div className="d-grid">
           <button
-            className="btn btn-primary"
+            className="btn btn-primary mx-auto"
             type="button"
             onClick={handleEditStudent}
+            style={{ width: "150px" }}
           >
             Save
           </button>

@@ -1,0 +1,14 @@
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+const ClearHistory = ({ to }) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate(to, { replace: true });
+  }, [navigate, to]);
+
+  return null;
+};
+
+export default ClearHistory;
