@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Spinner from "../../components/Spinner";
+import ToastNotification from "../../components/ToastedNotifiForTeacher";
 
 const TeacherHome = () => {
   const [teacher, setTeacher] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,27 +27,44 @@ const TeacherHome = () => {
           setLoading(false);
         });
     }
-  }, []);
+  }, [navigate]);
 
-  const markAttendance = (type) => {
-    const attendance = {
-      type,
-      date: new Date().toISOString(),
-    };
+  const markAttendance = async (type) => {
+    try {
+      const teacherId = teacher._id;
+      const currentDate = new Date();
+      const attendance = { type, date: currentDate.toISOString() };
 
-    axios
-      .post(
-        `http://localhost:5555/teacher/${teacher._id}/attendance`,
+      const { data } = await axios.post(
+        `http://localhost:5555/teacher/${teacherId}/attendance`,
         attendance
-      )
-      .then((response) => {
-        const message =
-          type === "in" ? "Marked In successfully" : "Marked Out successfully";
-        alert(message);
-      })
-      .catch((error) => {
+      );
+
+      if (data.message === "Attendance marked successfully") {
+        setToastMessage(`${type.toUpperCase()} attendance marked successfully`);
+        setShowToast(true);
+
+        // Update the teacher's attendance record in the state
+        setTeacher((prevTeacher) => ({
+          ...prevTeacher,
+          attendance: [...prevTeacher.attendance, attendance],
+        }));
+      } else {
+        setToastMessage(data.message);
+        setShowToast(true);
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setToastMessage(error.response.data.message);
+        setShowToast(true);
+      } else {
         console.error(error);
-      });
+        setToastMessage(
+          "An unexpected error occurred. Please try again later."
+        );
+        setShowToast(true);
+      }
+    }
   };
 
   const handleLogout = () => {
@@ -65,39 +85,49 @@ const TeacherHome = () => {
         Log Out
       </button>
 
-      {loading ? (
+      {teacher ? (
+        <>
+          <Link to={`/teacher/details/${teacher._id}`}>See Details</Link>
+          <div style={{ textAlign: "left" }}>
+            <h1>Welcome, {teacher.name || "Teacher"}</h1>
+            <p>Subject: {teacher.subject || "-"}</p>
+            <p>Age: {teacher.age || "-"}</p>
+            <p>Phone: {teacher.phone || "-"}</p>
+            <p>Address: {teacher.address || "-"}</p>
+            <p>Qualification: {teacher.qualification || "-"}</p>
+            <div
+              style={{
+                marginTop: "20px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <button
+                className="btn btn-success"
+                onClick={() => markAttendance("in")}
+              >
+                Mark In
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => markAttendance("out")}
+                style={{ marginLeft: "10px" }}
+              >
+                Mark Out
+              </button>
+            </div>
+          </div>
+        </>
+      ) : loading ? (
         <Spinner />
       ) : (
-        <div style={{ textAlign: "left" }}>
-          <h1>Welcome, {teacher ? teacher.name : "Teacher"}</h1>
-          <p>Subject: {teacher ? teacher.subject : "-"}</p>
-          <p>Age: {teacher ? teacher.age : "-"}</p>
-          <p>Phone: {teacher ? teacher.phone : "-"}</p>
-          <p>Address: {teacher ? teacher.address : "-"}</p>
-          <p>Qualification: {teacher ? teacher.qualification : "-"}</p>
-          <div
-            style={{
-              marginTop: "20px",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <button
-              className="btn btn-success"
-              onClick={() => markAttendance("in")}
-            >
-              Mark In
-            </button>
-            <button
-              className="btn btn-danger"
-              onClick={() => markAttendance("out")}
-              style={{ marginLeft: "10px" }}
-            >
-              Mark Out
-            </button>
-          </div>
-        </div>
+        <div>No teacher found</div>
       )}
+      <ToastNotification
+        show={showToast}
+        message={toastMessage}
+        onClose={() => setShowToast(false)}
+      />
     </div>
   );
 };

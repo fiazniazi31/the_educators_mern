@@ -14,9 +14,7 @@ const ShowTeacher = () => {
     axios
       .get(`http://localhost:5555/teacher/${id}`)
       .then((response) => {
-        //console.log("Response data:", response.data);
         if (response.data) {
-          // console.log("Student data:", response.data);
           setTeacher(response.data);
         } else {
           console.log("Invalid response format:", response.data);
@@ -27,11 +25,11 @@ const ShowTeacher = () => {
         console.log(error);
         setLoading(false);
       });
-  }, []);
+  }, [id]);
 
   return (
     <div style={{ padding: "4px" }}>
-      <BackButton />
+      {/* <BackButton /> */}
       <h1>Show Teacher</h1>
       {loading ? (
         <Spinner />
@@ -79,9 +77,23 @@ const ShowTeacher = () => {
             <span>Password: </span>
             <span>{teacher.password}</span>
           </div>
+
+          <h2>Attendance Records</h2>
+          {teacher.attendance && teacher.attendance.length > 0 ? (
+            <ul>
+              {teacher.attendance.map((record, index) => (
+                <li key={index}>
+                  <strong>{record.type.toUpperCase()}:</strong>{" "}
+                  {new Date(record.date).toLocaleString()}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div>No attendance records found</div>
+          )}
         </div>
       ) : (
-        <div>No student found</div>
+        <div>No teacher found</div>
       )}
     </div>
   );

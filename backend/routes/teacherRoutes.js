@@ -202,6 +202,30 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// // Mark attendance for a teacher
+// router.post("/:teacherId/attendance", async (req, res) => {
+//   try {
+//     const teacherId = req.params.teacherId;
+//     const { type, date } = req.body;
+
+//     // Find the teacher by teacherId
+//     const teacher = await Teacher.findById(teacherId);
+
+//     if (!teacher) {
+//       return res.status(404).json({ message: "Teacher not found" });
+//     }
+
+//     // Update the teacher's attendance record
+//     teacher.attendance.push({ type, date });
+//     await teacher.save();
+
+//     res.status(200).json({ message: "Attendance marked successfully" });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send("Server Error");
+//   }
+// });
+
 // Mark attendance for a teacher
 router.post("/:teacherId/attendance", async (req, res) => {
   try {
@@ -215,8 +239,49 @@ router.post("/:teacherId/attendance", async (req, res) => {
       return res.status(404).json({ message: "Teacher not found" });
     }
 
+    const currentDate = new Date(date);
+    const lastAttendanceRecord = teacher.attendance.slice(-1)[0];
+
+    if (lastAttendanceRecord) {
+      const lastAttendanceDate = new Date(lastAttendanceRecord.date);
+      const timeDiff = currentDate - lastAttendanceDate;
+      const fiveMinutes = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+      if (timeDiff < fiveMinutes) {
+        if (lastAttendanceRecord.type === "in" && type === "in") {
+          return res
+            .status(400)
+            .json({
+              message:
+                "Your attendance for IN is already marked. Try for OUT after 5 minutes.",
+            });
+        } else if (lastAttendanceRecord.type === "in" && type === "out") {
+          return res
+            .status(400)
+            .json({
+              message:
+                "Please try again after 5 minutes to mark OUT attendance.",
+            });
+        } else if (lastAttendanceRecord.type === "out" && type === "in") {
+          return res
+            .status(400)
+            .json({
+              message:
+                "Please try again after 5 minutes to mark IN attendance.",
+            });
+        } else if (lastAttendanceRecord.type === "out" && type === "out") {
+          return res
+            .status(400)
+            .json({
+              message:
+                "Your attendance for OUT is already marked. Try for IN after 5 minutes.",
+            });
+        }
+      }
+    }
+
     // Update the teacher's attendance record
-    teacher.attendance.push({ type, date });
+    teacher.attendance.push({ type, date: currentDate });
     await teacher.save();
 
     res.status(200).json({ message: "Attendance marked successfully" });

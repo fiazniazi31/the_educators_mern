@@ -5,12 +5,17 @@ import { Link } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineAddBox, MdOutlineDelete } from "react-icons/md";
+import ToastAlert from "../components/ToastNotification";
 
 const ShowAllStudents = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [classFilter, setClassFilter] = useState("");
   const [filteredStudents, setFilteredStudents] = useState([]);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastStudentName, setToastStudentName] = useState("");
+  const [toastType, setToastType] = useState("success");
 
   useEffect(() => {
     setLoading(true);
@@ -45,7 +50,9 @@ const ShowAllStudents = () => {
 
       if (!student) {
         console.log("Student not found");
-        alert("Student not found");
+        setToastMessage("Student not found");
+        setShowToast(true);
+        setToastType("danger");
         return;
       }
 
@@ -56,9 +63,29 @@ const ShowAllStudents = () => {
       );
 
       if (existingAttendance) {
-        alert("Attendance is already marked for today");
+        setToastMessage("Attendance is already marked for today");
+        setToastStudentName(student.name);
+        setShowToast(true);
+        setToastType("danger");
         return;
       }
+
+      const updatedStudent = {
+        ...student,
+        attendance: [
+          ...student.attendance,
+          {
+            date: new Date(today),
+            present,
+          },
+        ],
+      };
+
+      const updatedStudents = students.map((s) =>
+        s._id === studentId ? updatedStudent : s
+      );
+
+      setStudents(updatedStudents);
 
       await axios.post(
         `http://localhost:5555/student/${studentId}/attendance`,
@@ -67,8 +94,10 @@ const ShowAllStudents = () => {
           present,
         }
       );
-      alert("Attendance marked successfully");
-      // Optionally, you can refetch the student data or update the attendance record in the state
+      setToastMessage("Attendance marked successfully");
+      setToastStudentName(student.name);
+      setShowToast(true);
+      setToastType("success");
     } catch (error) {
       console.log(error);
     }
@@ -76,6 +105,13 @@ const ShowAllStudents = () => {
 
   return (
     <div style={{ padding: "4px" }}>
+      <ToastAlert
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        message={toastMessage}
+        studentName={toastStudentName}
+        type={toastType}
+      />
       <div
         style={{
           display: "flex",

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   // const handleLogin = () => {
   //   axios
@@ -28,7 +29,7 @@ const Login = () => {
       .post("http://localhost:5555/teacher/login", { username, password })
       .then((response) => {
         localStorage.setItem("teacherId", response.data.teacher._id);
-        navigate("/teacher/home");
+        navigate("/teacher/home", { replace: true, state: { from: location } });
       })
       .catch((error) => {
         if (error.response.status === 401) {
