@@ -13,7 +13,6 @@ const EditTeacher = () => {
   const [qualification, setQualification] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -23,34 +22,33 @@ const EditTeacher = () => {
     setLoading(true);
     axios
       .get(`http://localhost:5555/teacher/${id}`)
-      .then((responce) => {
-        setName(responce.data.name);
-        setSubject(responce.data.subject);
-        setAge(responce.data.age);
-        setPhone(responce.data.phone);
-        setAddress(responce.data.address);
-        setQualification(responce.data.qualification);
-        setUsername(responce.data.username);
-        setPassword(responce.data.password);
+      .then((response) => {
+        setName(response.data.name);
+        setSubject(response.data.subject);
+        setAge(response.data.age);
+        setPhone(response.data.phone);
+        setAddress(response.data.address);
+        setQualification(response.data.qualification);
+        setUsername(response.data.username); // This needs to be fetched from User
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
-        alert("Please Check Colsole");
+        console.error(error);
+        alert("Please Check Console");
         setLoading(false);
       });
-  }, []);
+  }, [id]);
 
-  const handelEditTeacher = () => {
+  const handleEditTeacher = () => {
     const data = {
-      name: name,
-      subject: subject,
-      age: age,
-      phone: phone,
-      address: address,
-      qualification: qualification,
-      username: username,
-      password: password,
+      name,
+      subject,
+      age,
+      phone,
+      address,
+      qualification,
+      username,
+      password,
     };
 
     setLoading(true);
@@ -61,8 +59,8 @@ const EditTeacher = () => {
         navigate("/");
       })
       .catch((error) => {
-        console.log(error);
-        alert("Please Check Colsole");
+        console.error(error);
+        alert("Please Check Console");
         setLoading(false);
       });
   };
@@ -72,121 +70,127 @@ const EditTeacher = () => {
       <div className="w-100" style={{ maxWidth: "600px" }}>
         <BackButton />
         <h1 className="text-center">Edit Teacher</h1>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="subject" className="form-label">
-            Subject
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="subject"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="age" className="form-label">
-            Age
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="age"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="phone" className="form-label">
-            Phone
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="address" className="form-label">
-            Address
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="qualification" className="form-label">
-            Qualification
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="qualification"
-            value={qualification}
-            onChange={(e) => setQualification(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="username" className="form-label">
-            Username
-          </label>
-          <input
-            type="email"
-            className="form-control"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <div className="input-group">
-            <input
-              type={showPassword ? "text" : "password"}
-              className="form-control"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "Hide" : "Show"}
-            </button>
-          </div>
-        </div>
-        <div className="d-grid">
-          <button
-            className="btn btn-primary mx-auto"
-            type="button"
-            onClick={handelEditTeacher}
-            style={{ width: "150px" }}
-          >
-            Save
-          </button>
-        </div>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">
+                Name
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="subject" className="form-label">
+                Subject
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="subject"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="age" className="form-label">
+                Age
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="age"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="phone" className="form-label">
+                Phone
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="address" className="form-label">
+                Address
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="qualification" className="form-label">
+                Qualification
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="qualification"
+                value={qualification}
+                onChange={(e) => setQualification(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="username" className="form-label">
+                Username
+              </label>
+              <input
+                type="email"
+                className="form-control"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <div className="input-group">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="form-control"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+            <div className="d-grid">
+              <button
+                className="btn btn-primary mx-auto"
+                type="button"
+                onClick={handleEditTeacher}
+                style={{ width: "150px" }}
+              >
+                Save
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

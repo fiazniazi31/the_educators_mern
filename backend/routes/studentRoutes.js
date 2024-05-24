@@ -1,4 +1,5 @@
 import express from "express";
+import bcrypt from "bcrypt";
 import { Student } from "../models/studentsModel.js";
 import { User } from "../models/usersModel.js";
 
@@ -50,6 +51,58 @@ const router = express.Router();
 //   }
 // });
 // Route to create a new student
+// router.post("/", async (request, response) => {
+//   try {
+//     const {
+//       name,
+//       fatherName,
+//       class: className,
+//       subjects,
+//       username,
+//       password,
+//       type,
+//     } = request.body;
+
+//     if (
+//       !name ||
+//       !fatherName ||
+//       !className ||
+//       !subjects ||
+//       subjects.length === 0 ||
+//       !username ||
+//       !password ||
+//       !type
+//     ) {
+//       return response.status(400).send({
+//         message: `Send all required fields: Name, Father Name, Class, and at least one Subject`,
+//       });
+//     }
+
+//     const newUser = new User({
+//       username,
+//       password,
+//       type,
+//     });
+
+//     const savedUser = await newUser.save();
+
+//     const newStudent = {
+//       name,
+//       fatherName,
+//       class: className,
+//       subjects,
+//       user: savedUser._id,
+//     };
+
+//     const student = await Student.create(newStudent);
+//     return response.status(201).json(student); // Use 201 Created status for successful creation
+//   } catch (error) {
+//     console.error(error.message);
+//     return response.status(500).json({ message: "Server error" });
+//   }
+// });
+
+// Route to create a new student
 router.post("/", async (request, response) => {
   try {
     const {
@@ -83,7 +136,7 @@ router.post("/", async (request, response) => {
       type,
     });
 
-    const savedUser = await newUser.save();
+    const savedUser = await newUser.save(); // <-- This line seems to be causing the issue
 
     const newStudent = {
       name,
@@ -96,7 +149,7 @@ router.post("/", async (request, response) => {
     const student = await Student.create(newStudent);
     return response.status(201).json(student); // Use 201 Created status for successful creation
   } catch (error) {
-    console.error(error.message);
+    console.error("Error creating student:", error);
     return response.status(500).json({ message: "Server error" });
   }
 });
@@ -451,21 +504,45 @@ router.get("/:id/attendance", async (request, response) => {
 });
 
 // login
+// router.post("/login", async (req, res) => {
+//   const { username, password } = req.body;
+//   try {
+//     const user = await User.findOne({ username, password });
+//     if (user) {
+//       res.status(200).json({
+//         message: "Login successful",
+//         userId: user._id,
+//         userType: user.type,
+//       });
+//     } else {
+//       res.status(401).json({ message: "Invalid username or password" });
+//     }
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+// login
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
   try {
-    const user = await User.findOne({ username, password });
+    const user = await User.findOne({ username });
     if (user) {
-      res.status(200).json({
-        message: "Login successful",
-        userId: user._id,
-        userType: user.type,
-      });
+      const isMatch = await user.comparePassword(password);
+      if (isMatch) {
+        res.status(200).json({
+          message: "Login successful",
+          userId: user._id,
+          userType: user.type,
+        });
+      } else {
+        res.status(401).json({ message: "Invalid username or password" });
+      }
     } else {
       res.status(401).json({ message: "Invalid username or password" });
     }
   } catch (error) {
-    console.error(error.message);
+    console.error("Error creating student:", error);
     res.status(500).json({ message: "Server error" });
   }
 });

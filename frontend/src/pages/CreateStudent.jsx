@@ -32,6 +32,35 @@ const CreateStudent = () => {
     }));
   };
 
+  // const handelSaveStudent = () => {
+  //   const selectedSubjects = Object.keys(subjects).filter(
+  //     (subject) => subjects[subject]
+  //   );
+
+  //   const data = {
+  //     name: name,
+  //     fatherName: fatherName,
+  //     class: classValue,
+  //     subjects: selectedSubjects,
+  //     username: username,
+  //     password: password,
+  //     type: "studnet",
+  //   };
+
+  //   setLoading(true);
+  //   axios
+  //     .post(`http://localhost:5555/student`, data)
+  //     .then(() => {
+  //       setLoading(false);
+  //       navigate("/student/showAllStudents");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       alert("Please Check Colsole");
+  //       setLoading(false);
+  //     });
+  // };
+
   const handelSaveStudent = () => {
     const selectedSubjects = Object.keys(subjects).filter(
       (subject) => subjects[subject]
@@ -56,7 +85,7 @@ const CreateStudent = () => {
       })
       .catch((error) => {
         console.log(error);
-        alert("Please Check Colsole");
+        alert("Please Check Console");
         setLoading(false);
       });
   };
