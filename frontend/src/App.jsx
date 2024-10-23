@@ -14,8 +14,8 @@ import EditTeacher from "./pages/EditTeacher";
 import ShowTeacher from "./pages/ShowTeacher";
 import CreateFeeRecord from "./pages/CreateFeeRecord";
 import AddStudentTest from "./pages/student/addTestRecord";
-import ShowStudentTestRecords from "./pages/student/ShowStudentTests ";
-import Login from "./pages/teacher/Login";
+import ShowStudentTestRecords from "./pages/student/ShowStudentTests";
+import TeacherLogin from "./pages/teacher/TeacherLogin";
 import StudentLogin from "./pages/student/StudentLogin";
 import TeacherHome from "./pages/teacher/TeacherHome";
 import StudnetHome from "./pages/student/StudnetHome";
@@ -44,7 +44,7 @@ function App() {
       <Route path="/teacher/delete/:id" element={<DeleteTeacher />} />
       <Route path="/teacher/edit/:id" element={<EditTeacher />} />
       <Route path="/teacher/details/:id" element={<ShowTeacher />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/TeacherLogin" element={<TeacherLogin />} />
       <Route path="/StudentLogin" element={<StudentLogin />} />
       <Route path="/AdminLogin" element={<AdminLogin />} />
       <Route path="/createAdmin" element={<CreateAdmin />} />

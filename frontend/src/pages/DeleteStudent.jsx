@@ -14,7 +14,7 @@ const DeleteStudent = () => {
       .delete(`http://localhost:5555/student/${id}`)
       .then(() => {
         setLoading(false);
-        navigate("/");
+        navigate("/home");
       })
       .catch((error) => {
         setLoading(false);

@@ -13,7 +13,7 @@ const RootHome = () => {
                 <Link to="/AdminLogin" className="btn btn-primary btn-lg">
                   Admin Login
                 </Link>
-                <Link to="/login" className="btn btn-success btn-lg">
+                <Link to="/TeacherLogin" className="btn btn-success btn-lg">
                   Teacher Login
                 </Link>
                 <Link to="/StudentLogin" className="btn btn-info btn-lg">

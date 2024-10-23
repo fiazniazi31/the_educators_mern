@@ -114,6 +114,7 @@ const router = express.Router();
 
 // Create a new teacher
 router.post("/", async (req, res) => {
+  // console.log(req.body);
   const {
     name,
     subject,
@@ -404,6 +405,11 @@ router.post("/:teacherId/attendance", async (req, res) => {
 
     if (!teacher) {
       return res.status(404).json({ message: "Teacher not found" });
+    }
+
+    // Ensure attendance array exists, if not, initialize it
+    if (!teacher.attendance) {
+      teacher.attendance = [];
     }
 
     const currentDate = new Date(date);

@@ -12,14 +12,16 @@ const TeacherHome = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const teacherId = localStorage.getItem("teacherId");
+    const teacherId = localStorage.getItem("userId");
     if (!teacherId) {
+      debugger;
       navigate("/login");
     } else {
       axios
         .get(`http://localhost:5555/teacher/user/${teacherId}`)
         .then((response) => {
           setTeacher(response.data);
+          debugger;
           setLoading(false);
         })
         .catch((error) => {
@@ -47,7 +49,9 @@ const TeacherHome = () => {
         // Update the teacher's attendance record in the state
         setTeacher((prevTeacher) => ({
           ...prevTeacher,
-          attendance: [...prevTeacher.attendance, attendance],
+          attendance: Array.isArray(prevTeacher.attendance)
+            ? [...prevTeacher.attendance, attendance]
+            : [attendance], // Ensure it's an array
         }));
       } else {
         setToastMessage(data.message);

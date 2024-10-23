@@ -80,6 +80,19 @@ const teacherSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  attendance: [
+    {
+      type: {
+        type: String, // 'in' or 'out'
+        required: true,
+      },
+      date: {
+        type: Date,
+        required: true,
+      },
+    },
+  ],
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

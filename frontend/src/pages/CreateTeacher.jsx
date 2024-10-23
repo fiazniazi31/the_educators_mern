@@ -275,14 +275,14 @@ const CreateTeacher = () => {
     }
 
     const data = {
-      name,
-      subject,
-      age,
-      phone,
-      address,
-      qualification,
-      username,
-      password,
+      name: name,
+      subject: subject,
+      age: age,
+      phone: phone,
+      address: address,
+      qualification: qualification,
+      username: username,
+      password: password,
       type: "teacher",
     };
 
